@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import * as path from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserModule } from './boards/User.module';
 import { AuthModule } from './auth/auth.module';
+import { UserModule } from './boards/User.module';
+import { ArticleModule } from './article/article.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { AuthModule } from './auth/auth.module';
     }),
     UserModule,
     AuthModule,
+    ArticleModule,
   ],
   controllers: [],
   providers: [],
