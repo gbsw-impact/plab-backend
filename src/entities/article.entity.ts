@@ -12,9 +12,6 @@ export class ArticleEntity extends CommonBigPKEntity {
   title: string;
 
   @Column('bigint', { unique: false, nullable: false })
-  viewCount: string;
-
-  @Column('bigint', { unique: false, nullable: false })
   userId: string;
 
   @ManyToOne(() => UserEntity, (user) => user.articles)

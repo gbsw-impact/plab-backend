@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -14,6 +15,7 @@ import { User } from 'src/decorators/user.decorator';
 @Controller('article')
 export class ArticleController {
   constructor(private readonly articleService: ArticleService) {}
+
   @UseGuards(JwtAuthGuard)
   @Post()
   async createArticle(@Body() body, @User() user) {
@@ -30,9 +32,11 @@ export class ArticleController {
 
     return article;
   }
+
   @Get('/:id')
   async readArticle(@Param('id') id) {
     const articleId = id;
+
     const article = await this.articleService.getArticle(articleId);
 
     return article;
@@ -53,6 +57,17 @@ export class ArticleController {
       title,
       content,
     );
+
+    return res;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  async deleteArticle(@Param('id') id, @User() user) {
+    const userId = user.id;
+    const articleId = id;
+
+    const res = await this.articleService.removeArticle(userId, articleId);
 
     return res;
   }

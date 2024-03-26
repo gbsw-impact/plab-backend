@@ -1,5 +1,6 @@
 import {
   CreateDateColumn,
+  DeleteDateColumn,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -13,4 +14,7 @@ export class CommonBigPKEntity {
 
   @UpdateDateColumn({ type: 'timestamp', nullable: true })
   updatedAt: Date | null;
+
+  @DeleteDateColumn({ type: 'timestamp', nullable: true })
+  deleteAt: Date | null;
 }

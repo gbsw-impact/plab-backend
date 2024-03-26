@@ -1,12 +1,10 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany } from 'typeorm';
 import { ArticleEntity } from './article.entity';
 import { CommentEntity } from './comment.entity';
+import { CommonBigPKEntity } from './common.entity';
 
 @Entity('user')
-export class UserEntity {
-  @PrimaryGeneratedColumn({ type: 'int' })
-  id: string;
-
+export class UserEntity extends CommonBigPKEntity {
   @Column('varchar', { unique: false, nullable: false })
   password: string;
 

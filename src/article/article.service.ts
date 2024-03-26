@@ -9,14 +9,15 @@ export class ArticleService {
     @InjectRepository(ArticleEntity)
     private readonly articleRepository: Repository<ArticleEntity>,
   ) {}
+
   async createArticle(title: string, content: string, userId: string) {
-    await this.articleRepository.save({
+    const article = await this.articleRepository.save({
       title: title,
       content: content,
       userId: userId,
     });
 
-    return this.articleRepository;
+    return article;
   }
 
   async getArticle(articleId: string) {
@@ -30,10 +31,10 @@ export class ArticleService {
   }
 
   async modifyArticle(
+    userId: string,
     articleId: string,
     title: string,
     content: string,
-    userId: string,
   ) {
     const article = await this.articleRepository.findOne({
       where: {
@@ -55,5 +56,14 @@ export class ArticleService {
     );
 
     return { affected: updateResult?.affected };
+  }
+
+  async removeArticle(userId: string, articleId: string) {
+    const deleteResult = await this.articleRepository.softDelete({
+      id: articleId,
+      userId: userId,
+    });
+
+    return { affected: deleteResult?.affected };
   }
 }
