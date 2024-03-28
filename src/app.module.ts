@@ -5,6 +5,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './boards/User.module';
 import { ArticleModule } from './article/article.module';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './filter/http-exception.filter';
+import { labModule } from './lab/lab.module';
 
 @Module({
   imports: [
@@ -30,8 +33,14 @@ import { ArticleModule } from './article/article.module';
     UserModule,
     AuthModule,
     ArticleModule,
+    labModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

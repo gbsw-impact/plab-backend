@@ -6,11 +6,14 @@ import {
   Param,
   Post,
   Put,
+  UseFilters,
   UseGuards,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
+import { CreateArticleDto } from 'src/dtos/article/create-article.dto';
+import { HttpExceptionFilter } from 'src/filter/http-exception.filter';
 
 @Controller('article')
 export class ArticleController {
@@ -18,7 +21,7 @@ export class ArticleController {
 
   @UseGuards(JwtAuthGuard)
   @Post()
-  async createArticle(@Body() body, @User() user) {
+  async createArticle(@Body() body: CreateArticleDto, @User() user) {
     const userId = user.id;
 
     const title = body.title;
@@ -32,7 +35,7 @@ export class ArticleController {
 
     return article;
   }
-
+  @UseFilters(HttpExceptionFilter)
   @Get('/:id')
   async readArticle(@Param('id') id) {
     const articleId = id;

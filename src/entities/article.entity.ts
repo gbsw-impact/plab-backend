@@ -2,12 +2,14 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { CommonBigPKEntity } from './common.entity';
 import { UserEntity } from './user.entity';
 import { CommentEntity } from './comment.entity';
+import { IsString } from 'class-validator';
 
 @Entity('Article')
 export class ArticleEntity extends CommonBigPKEntity {
   @Column('text', { unique: false, nullable: false })
   content: string;
 
+  @IsString()
   @Column('varchar', { unique: false, nullable: false })
   title: string;
 
