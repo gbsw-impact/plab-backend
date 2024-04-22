@@ -1,6 +1,10 @@
-import { Controller, Post, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { LocalAuthGuard } from 'src/guards/local-auth.guard';
+import { RolesGuard } from 'src/guards/role.guard';
+import { Roles } from 'src/decorators/role.decorator';
+import { RoleType } from './role.type';
 
 @Controller('auth')
 export class AuthController {
@@ -14,5 +18,20 @@ export class AuthController {
     console.log('user: ', user);
 
     return this.authService.logIn(user);
+  }
+
+  @Get('/authenticate')
+  @UseGuards(LocalAuthGuard)
+  isAuthenticated(@Req() req: Request): any {
+    const user: any = req.user;
+    return user;
+  }
+
+  @Get('/admin-role')
+  @UseGuards(LocalAuthGuard, RolesGuard)
+  @Roles(RoleType.ADMIN)
+  adminRole(@Req() req: Request): any {
+    const user: any = req.user;
+    return user;
   }
 }

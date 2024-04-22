@@ -15,7 +15,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
   async validate(payload) {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { iat, exp, ...user } = payload;
+    const { iat, exp, authorities, ...user } = payload;
     return user;
   }
 }

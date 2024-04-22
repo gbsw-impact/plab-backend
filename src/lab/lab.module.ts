@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { LabService } from './lab.service';
 import { LabController } from './lab.controller';
+import { LabService } from './lab.service';
 import { LabEntity } from 'src/entities/lab.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -9,4 +9,4 @@ import { TypeOrmModule } from '@nestjs/typeorm';
   controllers: [LabController],
   providers: [LabService],
 })
-export class labModule {}
+export class LabModule {}

@@ -1,5 +1,3 @@
-// lab.service.ts
-
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { LabEntity } from 'src/entities/lab.entity';
@@ -11,22 +9,25 @@ export class LabService {
     @InjectRepository(LabEntity)
     private readonly labRepository: Repository<LabEntity>,
   ) {}
-
   async rentalLab(
     rentalDate: Date,
-    rentalTime: string,
+    rentalStartTime: string,
+    rentalEndTime: string,
     rentalPurpose: string,
     hopeLab: string,
     reasonRental: string,
-    userId: string,
+    rentalUser: string,
+    labId: string,
   ) {
     const lab = await this.labRepository.save({
       rentalDate: rentalDate,
-      rentalTime: rentalTime,
+      rentalStartTime: rentalStartTime,
+      rentalEndTime: rentalEndTime,
       rentalPurpose: rentalPurpose,
       hopeLab: hopeLab,
       reasonRental: reasonRental,
-      userId: userId,
+      rentalUser: rentalUser,
+      labId: labId,
     });
 
     return lab;

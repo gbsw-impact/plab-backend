@@ -35,6 +35,12 @@ export class ArticleController {
 
     return article;
   }
+
+  @Get()
+  async getAllArticles() {
+    return await this.articleService.getAllArticles();
+  }
+
   @UseFilters(HttpExceptionFilter)
   @Get('/:id')
   async readArticle(@Param('id') id) {

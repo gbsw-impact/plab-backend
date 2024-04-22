@@ -3,11 +3,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import * as path from 'path';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
-import { UserModule } from './boards/User.module';
+import { UserModule } from './boards/user.module';
 import { ArticleModule } from './article/article.module';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './filter/http-exception.filter';
-import { labModule } from './lab/lab.module';
+import { UserAuthority } from './entities/user-authority.entity';
+import { LabModule } from './lab/lab.module';
 
 @Module({
   imports: [
@@ -33,7 +34,8 @@ import { labModule } from './lab/lab.module';
     UserModule,
     AuthModule,
     ArticleModule,
-    labModule,
+    UserAuthority,
+    LabModule,
   ],
   controllers: [],
   providers: [

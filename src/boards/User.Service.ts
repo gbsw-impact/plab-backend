@@ -11,27 +11,26 @@ export class UserService {
     private readonly userRepository: Repository<UserEntity>,
   ) {}
 
-  async getMainPage() {
+  async getUserInfo() {
     return 'user main page';
   }
 
-  async register(email: string, password: string, name: string) {
+  async register(password: string, userid: string) {
     const existedUser = await this.userRepository.findOne({
       where: {
-        email: email,
+        userid: userid,
       },
     });
 
     if (existedUser) {
-      throw new BadRequestException('이미 해당 이메일이 존재합니다.');
+      throw new BadRequestException('이미 등록된 사용자입니다.');
     }
 
     const hashedPassword = await hash(password, 10);
 
     const user = await this.userRepository.save({
-      email: email,
       password: hashedPassword,
-      name: name,
+      userid: userid,
     });
 
     return user;

@@ -30,6 +30,10 @@ export class ArticleService {
     return article;
   }
 
+  async getAllArticles() {
+    return await this.articleRepository.find();
+  }
+
   async modifyArticle(
     userId: string,
     articleId: string,

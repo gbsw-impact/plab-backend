@@ -2,24 +2,45 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CommonBigPKEntity } from './common.entity';
 
+enum approvalStatus {
+  WAITING = 'WAITING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
 @Entity('Lab')
 export class LabEntity extends CommonBigPKEntity {
   @Column('date', { nullable: false })
   rentalDate: Date;
 
-  @Column('varchar', { nullable: false }) // rentalTime의 데이터 타입을 varchar로 변경
-  rentalTime: string; // 문자열(string) 형식으로 변경하여 hh:mm:ss 형식으로 저장
+  @Column('varchar', { nullable: false, length: 5 })
+  rentalStartTime: string;
 
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { nullable: false, length: 5 })
+  rentalEndTime: string;
+
+  @Column('varchar', { nullable: false, length: 100 })
   rentalPurpose: string;
 
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { nullable: false, length: 20 })
   hopeLab: string;
 
-  @Column('varchar', { nullable: true })
+  @Column('varchar', { nullable: true, length: 200 })
   reasonRental: string;
 
+  @Column('int', { unique: false, nullable: false })
+  labId: string;
+
+  @Column('varchar', { nullable: false, length: 100 })
+  rentalUser: string;
+
+  @Column({
+    type: 'enum',
+    enum: approvalStatus,
+  })
+  approvalStatus: approvalStatus;
+
   @OneToOne(() => UserEntity)
-  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'labId', referencedColumnName: 'id' })
   user: UserEntity;
 }

@@ -4,39 +4,42 @@ import { UserEntity } from 'src/entities/user.entity';
 import { Repository } from 'typeorm';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { UserAuthority } from 'src/entities/user-authority.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
-
+    @InjectRepository(UserAuthority)
+    private readonly userAuthority: Repository<UserAuthority>,
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, password: string, name: string) {
+  async validateUser(userid: string, password: string) {
     const user = await this.userRepository.findOne({
-      where: { email: email },
+      where: { userid: userid },
+      relations: ['authorities'],
     });
 
     if (!user) {
-      throw new BadRequestException('이메일이 잘못되었습니다.');
+      throw new BadRequestException('아이디가 잘못되었습니다.');
     }
 
-    // verify password
     const isPasswordMatch = await compare(password, user.password);
 
     if (!isPasswordMatch) {
       throw new BadRequestException('비밀번호가 일치하지 않습니다.');
     }
 
-    if (!name) {
-      throw new BadRequestException('이름을 입력해주세요.');
-    }
+    this.convertInAuthorities(user);
+
     return {
       id: user.id,
-      email: user.email,
-      name: user.name,
+      userid: user.userid,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      authorities: user.authorities,
     };
   }
 
@@ -44,5 +47,35 @@ export class AuthService {
     return {
       accessToken: this.jwtService.sign(user),
     };
+  }
+
+  async tokenValidateUser(id: number) {
+    const userFind = await this.userAuthority.findOne({
+      where: { id: id },
+    });
+
+    this.flatAuthorities(userFind);
+    return userFind;
+  }
+
+  private flatAuthorities(user: any): UserEntity {
+    if (user && user.authorities) {
+      const authorities: string[] = [];
+      user.authorities.forEach((authority) =>
+        authorities.push(authority.authorityName),
+      );
+      user.authorities = authorities;
+    }
+    return user;
+  }
+
+  private convertInAuthorities(user: any): UserEntity {
+    if (user && user.authorities) {
+      const authorities: string[] = user.authorities.map(
+        (authority) => authority.authority_name,
+      );
+      user.authorities = authorities;
+    }
+    return user;
   }
 }
