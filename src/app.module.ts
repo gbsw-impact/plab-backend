@@ -9,6 +9,8 @@ import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { UserAuthority } from './entities/user-authority.entity';
 import { LabModule } from './lab/lab.module';
+import { commentModule } from './comment/comment.module';
+import { adminModule } from './admin/admin.module';
 
 @Module({
   imports: [
@@ -36,6 +38,8 @@ import { LabModule } from './lab/lab.module';
     ArticleModule,
     UserAuthority,
     LabModule,
+    commentModule,
+    adminModule,
   ],
   controllers: [],
   providers: [

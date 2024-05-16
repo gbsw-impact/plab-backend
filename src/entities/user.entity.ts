@@ -2,6 +2,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { ArticleEntity } from './article.entity';
 import { CommonBigPKEntity } from './common.entity';
 import { UserAuthority } from './user-authority.entity';
+import { CommentEntity } from './comment.entity';
 
 @Entity('user')
 export class UserEntity extends CommonBigPKEntity {
@@ -25,6 +26,9 @@ export class UserEntity extends CommonBigPKEntity {
 
   @OneToMany(() => ArticleEntity, (article) => article.user)
   articles: ArticleEntity[];
+
+  @OneToMany(() => CommentEntity, (article) => article.user)
+  comments: ArticleEntity[];
 
   @OneToMany(() => UserAuthority, (userAuthority) => userAuthority.user, {
     eager: true,

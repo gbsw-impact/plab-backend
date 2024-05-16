@@ -2,10 +2,9 @@ import { Column, Entity, JoinColumn, OneToOne } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CommonBigPKEntity } from './common.entity';
 
-enum approvalStatus {
+export enum approvalStatus {
   WAITING = 'WAITING',
   APPROVED = 'APPROVED',
-  REJECTED = 'REJECTED',
 }
 
 @Entity('Lab')
@@ -25,11 +24,11 @@ export class LabEntity extends CommonBigPKEntity {
   @Column('varchar', { nullable: false, length: 20 })
   hopeLab: string;
 
-  @Column('varchar', { nullable: true, length: 200 })
+  @Column('varchar', { nullable: false, length: 200 })
   reasonRental: string;
 
   @Column('int', { unique: false, nullable: false })
-  labId: string;
+  userId: string;
 
   @Column('varchar', { nullable: false, length: 100 })
   rentalUser: string;

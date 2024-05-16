@@ -63,7 +63,7 @@ export class ArticleService {
   }
 
   async removeArticle(userId: string, articleId: string) {
-    const deleteResult = await this.articleRepository.softDelete({
+    const deleteResult = await this.articleRepository.delete({
       id: articleId,
       userId: userId,
     });

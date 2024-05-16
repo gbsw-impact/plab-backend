@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { LabEntity } from 'src/entities/lab.entity';
+import { LabInformationEntity } from 'src/entities/lab-info.entity';
+import { LabEntity, approvalStatus } from 'src/entities/lab.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -8,8 +9,10 @@ export class LabService {
   constructor(
     @InjectRepository(LabEntity)
     private readonly labRepository: Repository<LabEntity>,
+    @InjectRepository(LabInformationEntity)
+    private readonly LabInformatuonEntity: Repository<LabInformationEntity>,
   ) {}
-  async rentalLab(
+  async rentalRequest(
     rentalDate: Date,
     rentalStartTime: string,
     rentalEndTime: string,
@@ -17,19 +20,28 @@ export class LabService {
     hopeLab: string,
     reasonRental: string,
     rentalUser: string,
-    labId: string,
+    userId: string,
   ) {
-    const lab = await this.labRepository.save({
-      rentalDate: rentalDate,
-      rentalStartTime: rentalStartTime,
-      rentalEndTime: rentalEndTime,
-      rentalPurpose: rentalPurpose,
-      hopeLab: hopeLab,
-      reasonRental: reasonRental,
-      rentalUser: rentalUser,
-      labId: labId,
+    const newRental = this.labRepository.create({
+      rentalDate,
+      rentalStartTime,
+      rentalEndTime,
+      rentalPurpose,
+      hopeLab,
+      reasonRental,
+      rentalUser,
+      userId,
+      approvalStatus: approvalStatus.WAITING,
     });
 
-    return lab;
+    return await this.labRepository.save(newRental);
+  }
+
+  async getAllLabs(): Promise<LabInformationEntity[]> {
+    return await this.LabInformatuonEntity.find({
+      where: {
+        Available: true,
+      },
+    });
   }
 }
