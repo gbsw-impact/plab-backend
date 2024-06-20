@@ -18,10 +18,4 @@ export class LabInformationEntity {
   @Column('boolean', { nullable: false, default: true })
   Available: boolean;
 
-  @Column('int', { unique: false, nullable: false })
-  labId: string;
-
-  @OneToOne(() => UserEntity)
-  @JoinColumn({ name: 'labId', referencedColumnName: 'id' })
-  user: UserEntity;
 }

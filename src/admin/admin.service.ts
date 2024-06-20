@@ -42,7 +42,6 @@ export class AdminService {
     const labInfo = await this.labInformationRepository.create({
       labName: lab.hopeLab,
       Available: false,
-      labId: lab.userId,
     });
     const saveInfo = await this.labInformationRepository.save(labInfo);
     return { affected: permitResult?.affected, saveInfo };

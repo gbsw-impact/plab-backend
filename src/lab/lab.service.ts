@@ -34,21 +34,29 @@ export class LabService {
       approvalStatus: approvalStatus.WAITING,
     });
 
-    const savedRental = await this.labRepository.save(newRental);
+    const savedRequest = await this.labRepository.save(newRental);
 
     const adminPhoneNumber = '+8201047632364';
     const message = `새로운 실습실 대여 요청이 있습니다.`;
 
     await this.twilioservice.sendSms(adminPhoneNumber, message);
 
-    return savedRental;
+    return savedRequest;
   }
 
   async cancelRequest(userId: string) {
     const req = await this.labRepository.findOne({ where: { userId: userId } });
 
     req.approvalStatus = approvalStatus.WAITING;
-    return await this.labRepository.save(req);
+
+    const savedRequest = await this.labRepository.save(req);
+
+    const adminPhoneNumber = '+8201047632364';
+    const message = `새로운 실습실 대여 취소 요청이 있습니다.`;
+
+    await this.twilioservice.sendSms(adminPhoneNumber, message);
+
+    return savedRequest
   }
 
   async getAllLabs(): Promise<LabInformationEntity[]> {

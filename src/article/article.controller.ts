@@ -52,8 +52,8 @@ export class ArticleController {
 
   @Get()
   async getAllArticles() {
-    const Articles = await this.articleService.getAllArticles();
     const popularArticles = await this.articleService.getPopularArticles();
+    const Articles = await this.articleService.getAllArticles();
 
     return { Articles, popularArticles };
   }
