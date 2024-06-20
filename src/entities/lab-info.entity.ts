@@ -5,23 +5,23 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { LabEntity } from './lab.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('Lab-info')
 export class LabInformationEntity {
   @PrimaryGeneratedColumn()
-  id: number;
+  id: string;
 
-  @Column('varchar', { nullable: false })
+  @Column('varchar', { nullable: false, unique: true })
   labName: string;
-
-  @Column('varchar', { nullable: false })
-  location: string;
 
   @Column('boolean', { nullable: false, default: true })
   Available: boolean;
 
-  @OneToOne(() => LabEntity)
+  @Column('int', { unique: false, nullable: false })
+  labId: string;
+
+  @OneToOne(() => UserEntity)
   @JoinColumn({ name: 'labId', referencedColumnName: 'id' })
-  user: LabEntity;
+  user: UserEntity;
 }

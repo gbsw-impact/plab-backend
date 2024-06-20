@@ -4,7 +4,6 @@ import { UserEntity } from './entities/user.entity';
 import { LabEntity } from './entities/lab.entity';
 import { ArticleEntity } from './entities/article.entity';
 import { UserAuthority } from './entities/user-authority.entity';
-import { CommentEntity } from './entities/comment.entity';
 import { LabInformationEntity } from './entities/lab-info.entity';
 
 dotenv.config();
@@ -21,7 +20,6 @@ export const dataSource = new DataSource({
     LabEntity,
     ArticleEntity,
     UserAuthority,
-    CommentEntity,
     LabInformationEntity,
   ],
   synchronize: false,

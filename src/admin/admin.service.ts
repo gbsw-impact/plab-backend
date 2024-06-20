@@ -1,5 +1,6 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { LabInformationEntity } from 'src/entities/lab-info.entity';
 import { LabEntity, approvalStatus } from 'src/entities/lab.entity';
 import { Repository } from 'typeorm';
 
@@ -8,29 +9,50 @@ export class AdminService {
   constructor(
     @InjectRepository(LabEntity)
     private readonly labRepository: Repository<LabEntity>,
+    @InjectRepository(LabInformationEntity)
+    private readonly labInformationRepository: Repository<LabInformationEntity>,
   ) {}
-  async cancelRentalLab(labId: string) {
-    const cancelResult = await this.labRepository.delete({
-      labId: labId,
+  async cancelRentalLab(userId: string) {
+    const lab = await this.labRepository.findOne({
+      where: { userId: userId },
     });
 
-    return { affected: cancelResult?.affected };
+    const labInfo = await this.labInformationRepository.findOne({
+      where: { labName: lab.hopeLab },
+    });
+    const deleteLab = await this.labRepository.delete({
+      userId: userId,
+    });
+    if (labInfo) {
+      await this.labInformationRepository.remove(labInfo);
+    }
+    return { affected: deleteLab?.affected, labInfo };
   }
 
-  async permitRentalLab(labId: string) {
+  async permitRentalLab(userId: string) {
     const lab = await this.labRepository.findOne({
-      where: { labId: labId },
+      where: { userId: userId },
     });
 
-    if (!lab) {
-      throw new NotFoundException('대여를 허용할 수 없습니다.');
-    }
-
     const permitResult = await this.labRepository.update(
-      { labId: labId },
+      { userId: userId },
       { approvalStatus: approvalStatus.APPROVED },
     );
 
-    return { affected: permitResult?.affected };
+    const labInfo = await this.labInformationRepository.create({
+      labName: lab.hopeLab,
+      Available: false,
+      labId: lab.userId,
+    });
+    const saveInfo = await this.labInformationRepository.save(labInfo);
+    return { affected: permitResult?.affected, saveInfo };
+  }
+
+  async getRequest(): Promise<LabEntity[]> {
+    return this.labRepository.find({
+      where: {
+        approvalStatus: approvalStatus.WAITING,
+      },
+    });
   }
 }

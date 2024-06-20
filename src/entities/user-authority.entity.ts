@@ -24,7 +24,7 @@ export class UserAuthority {
   authority_name: RoleType;
 
   @Column('varchar', { name: 'user_id' })
-  userId: string;
+  user_id: string;
 
   @ManyToOne(() => UserEntity, (user) => user.authorities)
   @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })

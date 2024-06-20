@@ -9,8 +9,8 @@ import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './filter/http-exception.filter';
 import { UserAuthority } from './entities/user-authority.entity';
 import { LabModule } from './lab/lab.module';
-import { commentModule } from './comment/comment.module';
 import { adminModule } from './admin/admin.module';
+import { TwilioModule } from './twilio/twilio.module';
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { adminModule } from './admin/admin.module';
         database: configService.get('DB_NAME'),
         username: configService.get('DB_USER'),
         password: configService.get('DB_PASSWORD'),
-        entities: [path.join(__dirname, '../**/*.entity.{js, ts}')], // 수정된 부분
+        entities: [path.join(__dirname, '../**/*.entity.{js, ts}')],
         synchronize: false,
         logging: true,
         timezone: 'local',
@@ -38,8 +38,8 @@ import { adminModule } from './admin/admin.module';
     ArticleModule,
     UserAuthority,
     LabModule,
-    commentModule,
     adminModule,
+    TwilioModule,
   ],
   controllers: [],
   providers: [

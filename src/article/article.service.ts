@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ArticleEntity } from 'src/entities/article.entity';
 import { Repository } from 'typeorm';
@@ -10,11 +14,29 @@ export class ArticleService {
     private readonly articleRepository: Repository<ArticleEntity>,
   ) {}
 
-  async createArticle(title: string, content: string, userId: string) {
+  async createArticle(
+    title: string,
+    content: string,
+    userId: string,
+    recruitment: string,
+    techStack: string,
+    teamMember: number,
+    position: string,
+    proceed: string,
+    deadline: Date,
+    link: string,
+  ) {
     const article = await this.articleRepository.save({
       title: title,
       content: content,
       userId: userId,
+      recruitment: recruitment,
+      techStack: techStack,
+      teamMember: teamMember,
+      position: position,
+      proceed: proceed,
+      deadline: deadline,
+      link: link,
     });
 
     return article;
@@ -26,6 +48,13 @@ export class ArticleService {
         id: articleId,
       },
     });
+
+    if (article) {
+      article.views += 1;
+      await this.articleRepository.save(article);
+    } else {
+      throw new NotFoundException('게시글을 찾을 수 없습니다.');
+    }
 
     return article;
   }
@@ -39,6 +68,13 @@ export class ArticleService {
     articleId: string,
     title: string,
     content: string,
+    recruitment: string,
+    techStack: string,
+    teamMember: number,
+    position: string,
+    proceed: string,
+    deadline: Date,
+    link: string,
   ) {
     const article = await this.articleRepository.findOne({
       where: {
@@ -56,6 +92,13 @@ export class ArticleService {
       {
         title: title,
         content: content,
+        recruitment: recruitment,
+        techStack: techStack,
+        teamMember: teamMember,
+        position: position,
+        proceed: proceed,
+        deadline: deadline,
+        link: link,
       },
     );
 
@@ -69,5 +112,19 @@ export class ArticleService {
     });
 
     return { affected: deleteResult?.affected };
+  }
+
+  async getPopularArticles() {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+
+    const popularArticles = await this.articleRepository
+      .createQueryBuilder('article')
+      .where('article.createdAt > :oneWeekAgo', { oneWeekAgo })
+      .orderBy('article.views', 'DESC')
+      .take(10)
+      .getMany();
+
+    return popularArticles;
   }
 }

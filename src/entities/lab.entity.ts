@@ -24,9 +24,6 @@ export class LabEntity extends CommonBigPKEntity {
   @Column('varchar', { nullable: false, length: 20 })
   hopeLab: string;
 
-  @Column('varchar', { nullable: false, length: 200 })
-  reasonRental: string;
-
   @Column('int', { unique: false, nullable: false })
   userId: string;
 
@@ -40,6 +37,6 @@ export class LabEntity extends CommonBigPKEntity {
   approvalStatus: approvalStatus;
 
   @OneToOne(() => UserEntity)
-  @JoinColumn({ name: 'labId', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: UserEntity;
 }

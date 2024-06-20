@@ -26,11 +26,25 @@ export class ArticleController {
 
     const title = body.title;
     const content = body.content;
+    const recruitment = body.recruitment;
+    const techStack = body.techStack;
+    const teamMember = body.teamMember;
+    const position = body.position;
+    const proceed = body.proceed;
+    const deadline = body.deadline;
+    const link = body.link;
 
     const article = await this.articleService.createArticle(
       title,
       content,
       userId,
+      recruitment,
+      techStack,
+      teamMember,
+      position,
+      proceed,
+      deadline,
+      link,
     );
 
     return article;
@@ -38,7 +52,10 @@ export class ArticleController {
 
   @Get()
   async getAllArticles() {
-    return await this.articleService.getAllArticles();
+    const Articles = await this.articleService.getAllArticles();
+    const popularArticles = await this.articleService.getPopularArticles();
+
+    return { Articles, popularArticles };
   }
 
   @UseFilters(HttpExceptionFilter)
@@ -59,12 +76,26 @@ export class ArticleController {
 
     const title = body.title;
     const content = body.content;
+    const recruitment = body.recruitment;
+    const techStack = body.techStack;
+    const teamMember = body.teamMember;
+    const position = body.position;
+    const proceed = body.proceed;
+    const deadline = body.deadline;
+    const link = body.link;
 
     const res = await this.articleService.modifyArticle(
       userId,
       articleId,
       title,
       content,
+      recruitment,
+      techStack,
+      teamMember,
+      position,
+      proceed,
+      deadline,
+      link,
     );
 
     return res;

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Patch,
+  Post,
+  UseGuards,
+} from '@nestjs/common';
 import { LabService } from './lab.service';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { User } from 'src/decorators/user.decorator';
@@ -17,9 +25,8 @@ export class LabController {
     const rentalEndTime = body.rentalEndTime;
     const rentalPurpose = body.rentalPurpose;
     const hopeLab = body.hopeLab;
-    const reasonRental = body.reasonRental;
     const rentalUser = body.rentalUser;
-    const labId = user.id;
+    const userId = user.id;
 
     const lab = await this.labService.rentalRequest(
       rentalDate,
@@ -27,12 +34,18 @@ export class LabController {
       rentalEndTime,
       rentalPurpose,
       hopeLab,
-      reasonRental,
       rentalUser,
-      labId,
+      userId,
     );
 
     return lab;
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('cancel/:userId')
+  async cancelRequest(@Param('userId') userId) {
+    const lab = await this.labService.cancelRequest(userId);
+    return { approvalStatus: lab.approvalStatus, userId };
   }
   @Get('available')
   async getAllLabs(): Promise<LabInformationEntity[]> {
