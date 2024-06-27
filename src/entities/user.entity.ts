@@ -3,7 +3,7 @@ import { ArticleEntity } from './article.entity';
 import { CommonBigPKEntity } from './common.entity';
 import { UserAuthority } from './user-authority.entity';
 
-@Entity('user')
+@Entity('User')
 export class UserEntity extends CommonBigPKEntity {
   @Column('varchar', { unique: false, nullable: false, length: 255 })
   password: string;

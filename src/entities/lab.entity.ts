@@ -7,7 +7,7 @@ export enum approvalStatus {
   APPROVED = 'APPROVED',
 }
 
-@Entity('lab')
+@Entity('Lab')
 export class LabEntity extends CommonBigPKEntity {
   @Column('date', { nullable: false })
   rentalDate: Date;

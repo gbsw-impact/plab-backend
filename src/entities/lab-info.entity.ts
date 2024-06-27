@@ -4,7 +4,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('labinfo')
+@Entity('Labinfo')
 export class LabInformationEntity {
   @PrimaryGeneratedColumn()
   id: string;

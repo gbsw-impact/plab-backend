@@ -3,7 +3,7 @@ import { CommonBigPKEntity } from './common.entity';
 import { UserEntity } from './user.entity';
 import { IsString } from 'class-validator';
 
-@Entity('article')
+@Entity('Article')
 export class ArticleEntity extends CommonBigPKEntity {
   @Column('varchar', { unique: false, nullable: false, length: 1000 })
   content: string;
