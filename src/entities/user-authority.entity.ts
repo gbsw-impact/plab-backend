@@ -12,7 +12,7 @@ enum RoleType {
   ADMIN = 'ROLE_ADMIN',
 }
 
-@Entity()
+@Entity('userauthority')
 export class UserAuthority {
   @PrimaryGeneratedColumn()
   id: number;

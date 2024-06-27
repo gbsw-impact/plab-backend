@@ -11,6 +11,7 @@ import { LabModule } from './lab/lab.module';
 import { adminModule } from './admin/admin.module';
 import { TwilioModule } from './twilio/twilio.module';
 import { UserModule } from './boards/user.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -41,7 +42,7 @@ import { UserModule } from './boards/user.module';
     adminModule,
     TwilioModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_FILTER,
